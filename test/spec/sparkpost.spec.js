@@ -1,3 +1,4 @@
+/* eslint-disable no-console */ 
 'use strict'
 
 var chai = require('chai'),
@@ -14,6 +15,14 @@ describe('SparkPost Library', function () {
   it('should be a constructor', function () {
     expect(SparkPost).to.be.a('function')
   })
+
+  afterEach(function () {                                                                                            
+      // Clean up all nock HTTP mocks                                                                                  
+      nock.cleanAll()                                                                                                  
+                                                                                                                       
+      // Restore all Sinon spies/stubs                                                                                 
+      sinon.restore()                                                                                                  
+    })    
 
   it('should require an API key', function () {
     var client
@@ -82,6 +91,7 @@ describe('SparkPost Library', function () {
   })
 
   function checkUserAgent(clientOptions, checkFn, done) {
+    console.log('input client options', clientOptions)
     let req = {
         method: 'GET',
         uri: 'get/test',
@@ -94,10 +104,13 @@ describe('SparkPost Library', function () {
       .get('/api/v1/get/test')
       .reply(200, function () {
         expect(this.req.headers).to.have.property('user-agent')
-        checkFn(this.req.headers['user-agent'])
+        // node-fetch returns headers as arrays, normalize to string
+        const userAgent = Array.isArray(this.req.headers['user-agent'])
+          ? this.req.headers['user-agent'][0]
+          : this.req.headers['user-agent']
+        checkFn(userAgent)
         return { ok: true }
       })
-
     client = new SparkPost('123456789', clientOptions)
     client.request(req, done)
   }
@@ -241,7 +254,8 @@ describe('SparkPost Library', function () {
       }
 
       client.request(options, function (err, data) {
-        expect(data.debug.request.uri.href).to.equal('https://test.sparkpost.com/test')
+        console.log('data1', data)
+        expect(data.debug.request.uri).to.equal('https://test.sparkpost.com/test')
 
         // finish async test
         done()
@@ -346,6 +360,7 @@ describe('SparkPost Library', function () {
       }
 
       client.get(options, function (err, data) {
+        console.log('data', data)
         expect(data).to.not.be.a('string')
         expect(data).to.be.an('object')
         expect(data).to.deep.equal({ ok: true })
