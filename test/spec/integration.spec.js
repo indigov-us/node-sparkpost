@@ -50,7 +50,7 @@ describe('Integration Tests (Real API)', function () {
   testCondition('should make a real GET request to retrieve sending domains', function (done) {
     this.timeout(10000)
 
-    client.sendingDomains.get('indigov.com').then((err, data) => {
+    client.sendingDomains.get('test.com').then((err, data) => {
         expect(err).to.be.null
         expect(data).to.be.an('object')
         expect(data).to.have.property('results')
@@ -61,7 +61,7 @@ describe('Integration Tests (Real API)', function () {
   testCondition('should make a real GET request to retrieve sending domains', function (done) {
     this.timeout(10000)
 
-    client.sendingDomains.verify('indigov.com').then((err, data) => {
+    client.sendingDomains.verify('test.com').then((err, data) => {
         expect(err).to.be.null
         expect(data).to.be.an('object')
         expect(data).to.have.property('results')
