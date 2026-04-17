@@ -51,9 +51,9 @@ describe('Integration Tests (Real API)', function () {
     this.timeout(10000)
 
     client.sendingDomains.get('test.com').then((err, data) => {
-        expect(err).to.be.null
-        expect(data).to.be.an('object')
-        expect(data).to.have.property('results')
+      expect(err).to.be.null
+      expect(data).to.be.an('object')
+      expect(data).to.have.property('results')
     })
     done()
   })
@@ -62,9 +62,9 @@ describe('Integration Tests (Real API)', function () {
     this.timeout(10000)
 
     client.sendingDomains.verify('test.com').then((err, data) => {
-        expect(err).to.be.null
-        expect(data).to.be.an('object')
-        expect(data).to.have.property('results')
+      expect(err).to.be.null
+      expect(data).to.be.an('object')
+      expect(data).to.have.property('results')
     })
     done()
   })

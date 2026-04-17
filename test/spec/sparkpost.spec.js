@@ -1,4 +1,4 @@
-/* eslint-disable no-console */ 
+/* eslint-disable no-console */
 'use strict'
 
 var chai = require('chai'),
@@ -16,13 +16,13 @@ describe('SparkPost Library', function () {
     expect(SparkPost).to.be.a('function')
   })
 
-  afterEach(function () {                                                                                            
-      // Clean up all nock HTTP mocks                                                                                  
-      nock.cleanAll()                                                                                                  
-                                                                                                                       
-      // Restore all Sinon spies/stubs                                                                                 
-      sinon.restore()                                                                                                  
-    })    
+  afterEach(function () {
+    // Clean up all nock HTTP mocks
+    nock.cleanAll()
+
+    // Restore all Sinon spies/stubs
+    sinon.restore()
+  })
 
   it('should require an API key', function () {
     var client
@@ -105,9 +105,7 @@ describe('SparkPost Library', function () {
       .reply(200, function () {
         expect(this.req.headers).to.have.property('user-agent')
         // node-fetch returns headers as arrays, normalize to string
-        const userAgent = Array.isArray(this.req.headers['user-agent'])
-          ? this.req.headers['user-agent'][0]
-          : this.req.headers['user-agent']
+        const userAgent = Array.isArray(this.req.headers['user-agent']) ? this.req.headers['user-agent'][0] : this.req.headers['user-agent']
         checkFn(userAgent)
         return { ok: true }
       })
