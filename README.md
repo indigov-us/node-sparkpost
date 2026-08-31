@@ -4,7 +4,7 @@
 
 # Node.js Client Library
 
-[![Travis CI](https://travis-ci.org/SparkPost/node-sparkpost.svg?branch=master)](https://travis-ci.org/SparkPost/node-sparkpost) [![Coverage Status](https://coveralls.io/repos/SparkPost/node-sparkpost/badge.svg?branch=master&service=github)](https://coveralls.io/github/SparkPost/node-sparkpost?branch=master) [![NPM version](https://badge.fury.io/js/sparkpost.png)](http://badge.fury.io/js/sparkpost)
+[![Travis CI](https://travis-ci.org/SparkPost/node-sparkpost.svg?branch=master)](https://travis-ci.org/SparkPost/node-sparkpost) [![NPM version](https://badge.fury.io/js/sparkpost.png)](http://badge.fury.io/js/sparkpost)
 
 The official Node.js binding for your favorite [SparkPost APIs](https://developers.sparkpost.com/api)!
 
@@ -60,11 +60,15 @@ _Note: Node.js versions 0.10 and 0.12 are no longer supported._
 _Note: All methods return promises and accept an optional last argument callback. [Read about how we handle callbacks and promises](/docs/async.md)._
 
 - **request(options[, callback])**
-  - `options` - [see request modules options](https://github.com/mikeal/request#requestoptions-callback)
   - `options.uri` - can either be a full url or a path that is appended to `options.origin` used at initialization ([url.resolve](http://nodejs.org/api/url.html#url_url_resolve_from_to))
-  - `options.debug` - setting to `true` includes full response from request client for debugging purposes
+  - `options.method` - HTTP method (set automatically by get/post/put/delete)
+  - `options.headers` - extra headers merged with the client defaults (`Authorization` is always the API key unless overridden)
+  - `options.qs` - query-string object appended to `uri`
+  - `options.json` - object body is JSON-serialized for POST/PUT/DELETE
+  - `options.debug` - setting to `true` includes request metadata on the resolved payload
+  - `options.gzip` - gzip decompression (default `true`; set `false` to disable)
 - **get | post | put | delete(options[, callback])**
-  - `options` - see request options
+  - `options` - same as `request`
   - Request method will be overwritten and set to the same value as the name of these methods.
 
 ## Creating a SparkPost Client
