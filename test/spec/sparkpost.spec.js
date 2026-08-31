@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 'use strict'
 
 var chai = require('chai'),
@@ -91,7 +90,6 @@ describe('SparkPost Library', function () {
   })
 
   function checkUserAgent(clientOptions, checkFn, done) {
-    console.log('input client options', clientOptions)
     let req = {
         method: 'GET',
         uri: 'get/test',
@@ -186,13 +184,11 @@ describe('SparkPost Library', function () {
     })
 
     it('should return an error when the request fails', function (done) {
-      // simulate a bad multipart to make request error
-      nock('https://api.sparkpost.com').get('/api/v1/get/test/fail').reply(200)
+      nock('https://api.sparkpost.com').get('/api/v1/get/test/fail').replyWithError('socket hang up')
 
       var options = {
         method: 'GET',
-        uri: 'get/test/fail',
-        multipart: [{}]
+        uri: 'get/test/fail'
       }
 
       client.request(options, function (err, data) {
@@ -231,9 +227,10 @@ describe('SparkPost Library', function () {
       }
 
       client.request(options, function (err, data) {
-        expect(data).to.be.defined
+        expect(data).to.be.undefined
         expect(err).to.be.defined
-
+        expect(err.name).to.equal('SparkPostError')
+        expect(err.statusCode).to.equal(422)
         expect(err.errors).to.be.undefined
 
         // finish async test
@@ -252,7 +249,7 @@ describe('SparkPost Library', function () {
       }
 
       client.request(options, function (err, data) {
-        console.log('data1', data)
+        expect(err).to.be.null
         expect(data.debug.request.uri).to.equal('https://test.sparkpost.com/test')
 
         // finish async test
@@ -320,6 +317,25 @@ describe('SparkPost Library', function () {
         done()
       })
     })
+
+    it('should append qs onto the request URI', function (done) {
+      nock('https://api.sparkpost.com').get('/api/v1/transmissions').query({ campaign_id: 'test-campaign' }).reply(200, { results: [] })
+
+      var options = {
+        method: 'GET',
+        uri: 'transmissions',
+        qs: { campaign_id: 'test-campaign' },
+        json: true,
+        debug: true
+      }
+
+      client.request(options, function (err, data) {
+        expect(err).to.be.null
+        expect(data.results).to.deep.equal([])
+        expect(data.debug.request.uri).to.include('campaign_id=test-campaign')
+        done()
+      })
+    })
   })
 
   describe('get method', function () {
@@ -358,7 +374,6 @@ describe('SparkPost Library', function () {
       }
 
       client.get(options, function (err, data) {
-        console.log('data', data)
         expect(data).to.not.be.a('string')
         expect(data).to.be.an('object')
         expect(data).to.deep.equal({ ok: true })
