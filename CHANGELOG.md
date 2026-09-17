@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.1.9] - 2026-09-17
+
+- Replaced unmaintained `request` with `node-fetch`
+- Removed `coveralls` (it pulled in `request` as a transitive dependency)
+
 ## [2.1.5] - 2022-12-07
 
 - Added types
