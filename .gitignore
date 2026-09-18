@@ -1,6 +1,11 @@
 node_modules
 xunit.xml
 test/reports/*
+.env
 
 # vscode
 .vscode
+
+# AIDLC pipeline artifacts
+.cursor/tmp/
+.cursor/

@@ -6,7 +6,6 @@
 
 /// <reference types="node"/>
 
-import * as Request from 'request'
 import * as Http from 'http'
 
 declare class SparkPost {
@@ -791,16 +790,16 @@ declare class SparkPost {
    */
   constructor(apiKey?: string, options?: SparkPost.ConstructorOptions)
 
-  request(options: Request.Options, callback: SparkPost.Callback<any>): void
-  request(options: Request.Options): Promise<SparkPost.Response<any>>
-  get(options: Request.Options, callback: SparkPost.Callback<any>): void
-  get(options: Request.Options): Promise<SparkPost.Response<any>>
-  post(options: Request.Options, callback: SparkPost.Callback<any>): void
-  post(options: Request.Options): Promise<SparkPost.Response<any>>
-  put(options: Request.Options, callback: SparkPost.Callback<any>): void
-  put(options: Request.Options): Promise<SparkPost.Response<any>>
-  delete(options: Request.Options, callback: SparkPost.Callback<any>): void
-  delete(options: Request.Options): Promise<SparkPost.Response<any>>
+  request(options: SparkPost.RequestOptions, callback: SparkPost.Callback<any>): void
+  request(options: SparkPost.RequestOptions): Promise<SparkPost.Response<any>>
+  get(options: SparkPost.RequestOptions, callback: SparkPost.Callback<any>): void
+  get(options: SparkPost.RequestOptions): Promise<SparkPost.Response<any>>
+  post(options: SparkPost.RequestOptions, callback: SparkPost.Callback<any>): void
+  post(options: SparkPost.RequestOptions): Promise<SparkPost.Response<any>>
+  put(options: SparkPost.RequestOptions, callback: SparkPost.Callback<any>): void
+  put(options: SparkPost.RequestOptions): Promise<SparkPost.Response<any>>
+  delete(options: SparkPost.RequestOptions, callback: SparkPost.Callback<any>): void
+  delete(options: SparkPost.RequestOptions): Promise<SparkPost.Response<any>>
 }
 
 declare namespace SparkPost {
@@ -825,6 +824,19 @@ declare namespace SparkPost {
     endpoint?: string | undefined
     apiVersion?: string | undefined
     headers?: any
+    debug?: boolean | undefined
+  }
+
+  /** Options passed to client.request / get / post / put / delete (no longer request.Options). */
+  interface RequestOptions {
+    uri: string
+    method?: string | undefined
+    headers?: { [header: string]: any } | undefined
+    qs?: { [key: string]: any } | undefined
+    json?: boolean | object | undefined
+    body?: any
+    debug?: boolean | undefined
+    gzip?: boolean | undefined
   }
 
   interface Response<T> extends Http.IncomingMessage {
